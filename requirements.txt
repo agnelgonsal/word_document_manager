@@ -11,8 +11,8 @@ Werkzeug==2.3.7
 
 #**Create project directory:**
 #```bash
-mkdir word_document_manager
-cd word_document_manager
+#mkdir word_document_manager
+#cd word_document_manager
 #```
 
 #**Create virtual environment:**
