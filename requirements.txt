@@ -3,25 +3,132 @@ Flask==2.3.3
 python-docx==0.8.11
 Werkzeug==2.3.7
 
-# README.md - Setup Instructions
+# deployment_guide.md
 
-## Word Document Management Web Application
+## Quick Deployment Guide
 
-##A Python Flask web application for managing Word documents with the ability to create, edit, upload, preview, and manage Word documents.
+### 1. Server Setup
 
-### Features
+**Create project directory:**
+```bash
+mkdir word_document_manager
+cd word_document_manager
+```
 
-- **Create New Documents**: Create new Word documents with custom titles and content
-- **Upload Documents**: Upload existing .docx and .doc files
-- **Edit in Word**: Open documents directly in Microsoft Word for editing
-- **Preview Documents**: View document content in the browser
-- **Download Documents**: Download documents to your computer
-- **Delete Documents**: Remove documents from the system
-- **Document Statistics**: View document count and total size
-- **Responsive Design**: Works on desktop and mobile devices
+**Create virtual environment:**
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-### Requirements
+**Install dependencies:**
+```bash
+pip install Flask python-docx
+```
 
-- Python 3.7 or higher
-- Microsoft Word (for editing functionality)
-- Web browser
+### 2. File Structure
+
+Create this exact folder structure:
+```
+word_document_manager/
+├── app.py                 # Main Flask application
+├── requirements.txt       # Dependencies
+├── documents/            # Auto-created for document storage
+└── templates/
+    ├── base.html
+    ├── index.html
+    ├── create.html
+    ├── upload.html
+    ├── webedit.html
+    └── preview.html
+```
+
+### 3. Quick Start
+
+**Run the application:**
+```bash
+python app.py
+```
+
+**Access the application:**
+- Local: http://localhost:5000
+- Server: http://your-server-ip:5000
+
+### 4. Key Changes Made
+
+1. **Server-friendly editing**: Primary editing is now web-based
+2. **Better error handling**: Detects server environment automatically
+3. **Fixed routing**: All routes work properly
+4. **Clean templates**: Simplified HTML structure
+5. **Desktop fallback**: "Open in Word" tries desktop apps but falls back gracefully
+
+### 5. Features Available
+
+- ✅ **Create documents** via web interface
+- ✅ **Upload documents** (.docx, .doc)
+- ✅ **Edit in browser** (primary method)
+- ✅ **Preview documents** in browser
+- ✅ **Download documents**
+- ✅ **Delete documents**
+- ✅ **Open in Word** (if desktop environment available)
+
+### 6. Production Deployment
+
+For production, consider using:
+
+**With Gunicorn:**
+```bash
+pip install gunicorn
+gunicorn -w 4 -b 0.0.0.0:5000 app:app
+```
+
+**With uWSGI:**
+```bash
+pip install uwsgi
+uwsgi --http 0.0.0.0:5000 --wsgi-file app.py --callable app
+```
+
+**Important:** Change the `app.secret_key` in app.py to a secure random string before production deployment.
+
+### 7. Troubleshooting
+
+**Common issues and solutions:**
+
+1. **Import errors**: Make sure all files are in the correct directories
+2. **Template errors**: Ensure all HTML files are in the `templates/` folder
+3. **Permission errors**: Check that the application can write to the `documents/` folder
+4. **Port conflicts**: Change port in `app.run(port=5000)` if needed
+
+### 8. File Permissions
+
+Ensure proper permissions:
+```bash
+chmod 755 word_document_manager/
+chmod 644 app.py
+chmod 644 templates/*.html
+chmod 755 documents/  # Will be created automatically
+```
+
+This version is specifically designed to work well on Linux servers without desktop environments, with web-based editing as the primary method. in Word**:
+- Ensure Microsoft Word is installed and properly configured
+- Check that the file associations are set correctly
+- On Linux, you may need to install additional packages for file opening
+
+**Upload errors**:
+- Check that the file is a valid .docx or .doc format
+- Ensure the documents folder has write permissions
+- Verify that the file isn't corrupted
+
+**Preview not working**:
+- Some complex Word documents may not preview correctly
+- Use the "Edit in Word" function for full document viewing
+
+### API Endpoints
+
+The application also provides a REST API:
+
+- `GET /api/documents` - Returns JSON list of all documents
+
+### License
+
+This application is provided as-is for educational and personal use.
