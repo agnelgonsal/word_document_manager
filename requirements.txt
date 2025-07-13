@@ -9,26 +9,26 @@ Werkzeug==2.3.7
 
 ### 1. Server Setup
 
-**Create project directory:**
+#**Create project directory:**
 ```bash
 mkdir word_document_manager
 cd word_document_manager
 ```
 
-**Create virtual environment:**
+#**Create virtual environment:**
 ```bash
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-**Install dependencies:**
+#**Install dependencies:**
 ```bash
 pip install Flask python-docx
 ```
 
 ### 2. File Structure
 
-Create this exact folder structure:
+#Create this exact folder structure:
 ```
 word_document_manager/
 ├── app.py                 # Main Flask application
@@ -74,7 +74,7 @@ python app.py
 
 ### 6. Production Deployment
 
-For production, consider using:
+#For production, consider using:
 
 **With Gunicorn:**
 ```bash
@@ -108,27 +108,3 @@ chmod 644 app.py
 chmod 644 templates/*.html
 chmod 755 documents/  # Will be created automatically
 ```
-
-This version is specifically designed to work well on Linux servers without desktop environments, with web-based editing as the primary method. in Word**:
-- Ensure Microsoft Word is installed and properly configured
-- Check that the file associations are set correctly
-- On Linux, you may need to install additional packages for file opening
-
-**Upload errors**:
-- Check that the file is a valid .docx or .doc format
-- Ensure the documents folder has write permissions
-- Verify that the file isn't corrupted
-
-**Preview not working**:
-- Some complex Word documents may not preview correctly
-- Use the "Edit in Word" function for full document viewing
-
-### API Endpoints
-
-The application also provides a REST API:
-
-- `GET /api/documents` - Returns JSON list of all documents
-
-### License
-
-This application is provided as-is for educational and personal use.
