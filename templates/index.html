@@ -18,9 +18,13 @@
                                     <i class="fas fa-clock"></i> {{ doc.modified }}
                                 </p>
                                 <div class="btn-group-vertical gap-2 w-100">
-                                    <a href="{{ url_for('edit_document', filename=doc.name) }}" 
+                                    <a href="{{ url_for('webedit_document', filename=doc.name) }}" 
                                        class="btn btn-primary btn-sm">
-                                        <i class="fas fa-edit"></i> Edit in Word
+                                        <i class="fas fa-edit"></i> Edit in Browser
+                                    </a>
+                                    <a href="{{ url_for('edit_document', filename=doc.name) }}" 
+                                       class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-external-link-alt"></i> Open in Word
                                     </a>
                                     <a href="{{ url_for('preview_document', filename=doc.name) }}" 
                                        class="btn btn-outline-secondary btn-sm">
