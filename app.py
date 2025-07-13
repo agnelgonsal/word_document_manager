@@ -39,14 +39,35 @@ def get_documents():
     return sorted(documents, key=lambda x: x['modified'], reverse=True)
 
 def open_document_in_word(filepath):
-    """Open document in Microsoft Word"""
+    """Open document in Microsoft Word or LibreOffice"""
     try:
         if platform.system() == "Windows":
             os.startfile(filepath)
         elif platform.system() == "Darwin":  # macOS
             subprocess.call(["open", filepath])
         else:  # Linux
-            subprocess.call(["xdg-open", filepath])
+            # Try different methods for Linux
+            try:
+                # Try LibreOffice first
+                subprocess.call(["libreoffice", "--writer", filepath])
+                return True
+            except FileNotFoundError:
+                try:
+                    # Try OnlyOffice
+                    subprocess.call(["onlyoffice-desktopeditors", filepath])
+                    return True
+                except FileNotFoundError:
+                    try:
+                        # Try WPS Office
+                        subprocess.call(["wps", filepath])
+                        return True
+                    except FileNotFoundError:
+                        try:
+                            # Fallback to xdg-open
+                            subprocess.call(["xdg-open", filepath])
+                            return True
+                        except:
+                            return False
         return True
     except Exception as e:
         print(f"Error opening document: {e}")
@@ -131,10 +152,15 @@ def edit_document(filename):
         flash('Document not found', 'error')
         return redirect(url_for('index'))
     
+    # Check if we're on a server without desktop environment
+    if platform.system() == "Linux" and not os.environ.get('DISPLAY'):
+        flash('Document editing is not available on this server. Please download the document to edit it locally.', 'error')
+        return redirect(url_for('index'))
+    
     if open_document_in_word(filepath):
-        flash(f'Opening "{filename}" in Microsoft Word...', 'info')
+        flash(f'Opening "{filename}" in document editor...', 'info')
     else:
-        flash('Could not open document in Word. Please ensure Microsoft Word is installed.', 'error')
+        flash('Could not open document. Please download it and open locally, or install LibreOffice.', 'error')
     
     return redirect(url_for('index'))
 
@@ -188,10 +214,55 @@ def preview_document(filename):
         flash(f'Error reading document: {str(e)}', 'error')
         return redirect(url_for('index'))
 
+@app.route('/webedit/<filename>', methods=['GET', 'POST'])
+def web_edit_document(filename):
+    """Web-based document editing"""
+    filepath = os.path.join(UPLOAD_FOLDER, filename)
+    
+    if not os.path.exists(filepath):
+        flash('Document not found', 'error')
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        # Save the edited content
+        content = request.form['content']
+        title = request.form.get('title', '')
+        
+        # Create new document with updated content
+        doc = Document()
+        
+        if title:
+            doc.add_heading(title, 0)
+        
+        # Split content by lines and add as paragraphs
+        for line in content.split('\n'):
+            if line.strip():
+                doc.add_paragraph(line)
+        
+        doc.save(filepath)
+        flash(f'Document "{filename}" updated successfully!', 'success')
+        return redirect(url_for('index'))
+    
+    # Read current content for editing
+    try:
+        doc = Document(filepath)
+        content = []
+        title = ""
+        
+        for paragraph in doc.paragraphs:
+            if paragraph.style.name.startswith('Heading') and not title:
+                title = paragraph.text
+            elif paragraph.text.strip():
+                content.append(paragraph.text)
+        
+        content_text = '\n'.join(content)
+        return render_template('webedit.html', filename=filename, content=content_text, title=title)
+    except Exception as e:
+        flash(f'Error reading document: {str(e)}', 'error')
+        return redirect(url_for('index'))
+
 @app.route('/api/documents')
 def api_documents():
     """API endpoint to get documents list"""
     return jsonify(get_documents())
-
-if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
