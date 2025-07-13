@@ -10,45 +10,32 @@ Werkzeug==2.3.7
 ### 1. Server Setup
 
 #**Create project directory:**
-```bash
+#```bash
 mkdir word_document_manager
 cd word_document_manager
-```
+#```
 
 #**Create virtual environment:**
-```bash
+#```bash
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+#```
 
 #**Install dependencies:**
-```bash
+#```bash
 pip install Flask python-docx
-```
+#```
 
 ### 2. File Structure
 
 #Create this exact folder structure:
-```
-word_document_manager/
-├── app.py                 # Main Flask application
-├── requirements.txt       # Dependencies
-├── documents/            # Auto-created for document storage
-└── templates/
-    ├── base.html
-    ├── index.html
-    ├── create.html
-    ├── upload.html
-    ├── webedit.html
-    └── preview.html
-```
 
 ### 3. Quick Start
 
 **Run the application:**
-```bash
+#```bash
 python app.py
-```
+#```
 
 **Access the application:**
 - Local: http://localhost:5000
