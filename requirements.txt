@@ -1,0 +1,130 @@
+# requirements.txt
+Flask==2.3.3
+python-docx==0.8.11
+Werkzeug==2.3.7
+
+# README.md - Setup Instructions
+
+## Word Document Management Web Application
+
+A Python Flask web application for managing Word documents with the ability to create, edit, upload, preview, and manage Word documents.
+
+### Features
+
+- **Create New Documents**: Create new Word documents with custom titles and content
+- **Upload Documents**: Upload existing .docx and .doc files
+- **Edit in Word**: Open documents directly in Microsoft Word for editing
+- **Preview Documents**: View document content in the browser
+- **Download Documents**: Download documents to your computer
+- **Delete Documents**: Remove documents from the system
+- **Document Statistics**: View document count and total size
+- **Responsive Design**: Works on desktop and mobile devices
+
+### Requirements
+
+- Python 3.7 or higher
+- Microsoft Word (for editing functionality)
+- Web browser
+
+### Installation
+
+1. **Clone or download the application files**
+
+2. **Install Python dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Create the folder structure**:
+   ```
+   word_document_manager/
+   ├── app.py
+   ├── requirements.txt
+   ├── documents/          # Will be created automatically
+   └── templates/
+       ├── base.html
+       ├── index.html
+       ├── create.html
+       ├── upload.html
+       └── preview.html
+   ```
+
+4. **Set up templates**:
+   - Create a `templates` folder in your project directory
+   - Save each HTML template in separate files as shown above
+
+### Running the Application
+
+1. **Start the Flask application**:
+   ```bash
+   python app.py
+   ```
+
+2. **Access the application**:
+   Open your web browser and navigate to `http://localhost:5000`
+
+### Usage
+
+1. **Creating Documents**:
+   - Click "Create New Document"
+   - Enter a filename, title, and initial content
+   - Click "Create Document"
+
+2. **Uploading Documents**:
+   - Click "Upload Document"
+   - Select a .docx or .doc file
+   - Click "Upload Document"
+
+3. **Editing Documents**:
+   - Click "Edit in Word" on any document
+   - The document will open in Microsoft Word
+   - Save changes in Word, and they'll be reflected in the web application
+
+4. **Previewing Documents**:
+   - Click "Preview" to view document content in the browser
+   - Note: Formatting may not be preserved in preview mode
+
+5. **Managing Documents**:
+   - Download documents using the "Download" button
+   - Delete documents using the "Delete" button (with confirmation)
+
+### Configuration
+
+You can modify the following settings in `app.py`:
+
+- `UPLOAD_FOLDER`: Directory where documents are stored (default: 'documents')
+- `app.secret_key`: Change this to a secure secret key for production
+- `app.run()` parameters: Host, port, and debug settings
+
+### Security Notes
+
+- Change the `app.secret_key` before deploying to production
+- Consider adding authentication for multi-user environments
+- Validate file uploads and implement file size limits for production use
+- Use HTTPS in production environments
+
+### Troubleshooting
+
+**Documents won't open in Word**:
+- Ensure Microsoft Word is installed and properly configured
+- Check that the file associations are set correctly
+- On Linux, you may need to install additional packages for file opening
+
+**Upload errors**:
+- Check that the file is a valid .docx or .doc format
+- Ensure the documents folder has write permissions
+- Verify that the file isn't corrupted
+
+**Preview not working**:
+- Some complex Word documents may not preview correctly
+- Use the "Edit in Word" function for full document viewing
+
+### API Endpoints
+
+The application also provides a REST API:
+
+- `GET /api/documents` - Returns JSON list of all documents
+
+### License
+
+This application is provided as-is for educational and personal use.
